@@ -1,0 +1,7 @@
+* stockfighterr
+
+An R client for the stockfighter API (https://www.stockfighter.io). 
+
+Implements all of the HTTP functions from [[https://starfighter.readme.io/docs/][the docs]], with the exception of the two websocket functions. 
+
+Unfortunately R does not currently possess a websocket client, so those functions are missing, as of now. 
