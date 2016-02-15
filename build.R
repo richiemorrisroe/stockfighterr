@@ -1,0 +1,8 @@
+devtools::setup(".", rstudio=FALSE)
+devtools::use_testthat()
+devtools::document()
+devtools::use_package("httr", type="Depends")
+devtools::use_package("jsonlite")
+devtools::check(".")
+devtools::build(".")
+devtools::install(".")
