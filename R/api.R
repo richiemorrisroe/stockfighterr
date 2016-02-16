@@ -102,7 +102,7 @@ get_tickers <- function(venue) {
 get_order_status <- function(id, venue, stock) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
     print(url)
-    res <- httr::GET(url) ## httr::add_headers("X-Starfighter-Authorization"=apikey))
+    res <- httr::GET(url) 
     res
 }
 ##' Cancel an outstanding order
@@ -117,7 +117,7 @@ get_order_status <- function(id, venue, stock) {
 ##' @export
 cancel_order <- function(id, venue, stock) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
-    res <- httr::DELETE(url) ## add_headers("X-Starfighter-Authorization"=apikey))
+    res <- httr::DELETE(url)
     res
 }
 ##' Get the status of all orders related to a trading account
@@ -150,4 +150,20 @@ get_api_key <- function(path) {
 get_venues <- function () {
     url <- paste0(base_url, "venues")
     httr::GET(url)
+}
+##' Check response code of a http request
+##'
+##' Message if problem
+##' @title check_status
+##' @param response a response object
+##' @return a response (print a message if there\'s a problem)
+##' @author richie
+check_status <- function(response) {
+    if(httr::status_code(response)==200) {
+        return(response)
+    } else {
+        message("did not return success")
+        return(response)
+    }
+    response
 }
