@@ -1,6 +1,6 @@
 orderb <- get_orderbook("TESTEX", "FOOBAR")
 test_that("test venue is available", {
-    expect_equal(status_code(get_orderbook("TESTEX", "FOOBAR")), 200)})
+    expect_equal(httr::status_code(get_orderbook("TESTEX", "FOOBAR")), 200)})
 ordbuy <- create_order(account = "EXB123456",
                                          venue = "TESTEX",
                                          stock = "FOOBAR",
