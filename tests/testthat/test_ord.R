@@ -10,7 +10,7 @@ ordbuy <- create_order(account = "EXB123456",
 test_that("create order returns a list",
           expect_is(ordbuy, "list" ))
 test_that("place_order returns a response", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
 placebuy <- place_order("TESTEX", "FOOBAR",
                         body = ordbuy, apikey=apikey)
     expect_is(placebuy, "response")
@@ -18,13 +18,13 @@ placebuy <- place_order("TESTEX", "FOOBAR",
 
 
 test_that("get_all_orders returns a response", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
     expect_is(get_all_orders("TESTEX", "EXB123456", apikey), "response")
 })
 
 
 test_that("get_order_status returns a response", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
           expect_is(
               get_order_status(
                   placebuy.p$id,
@@ -42,7 +42,7 @@ test_that("cancel order returns a response", {
 
 
 test_that("ioc orders are always closed after response", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
     ord <- create_order("EXB123456",
                         "TESTEX",
                         "FOOBAR",
@@ -57,19 +57,17 @@ test_that("ioc orders are always closed after response", {
 
 
 test_that("parse_response returns a list from an order object", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
     expect_is(parse_response(
         place_order("TESTEX", "FOOBAR",
                     body=ord, apikey=apikey)), "list")
 })
 test_that("a placed order returns a totalFilled numeric greater than 0", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
         expect_gte(placebuyp[["totalFilled"]], 0)
     })
 
 test_that("place_order returns a response", {
-    skip_on_cran("This test requires an API key")
+    skip_on_cran()
     expect_is(placebuy, "response")
 })
-
-
