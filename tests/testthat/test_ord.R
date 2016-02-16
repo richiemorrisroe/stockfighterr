@@ -25,6 +25,8 @@ test_that("get_all_orders returns a response", {
 
 test_that("get_order_status returns a response", {
     skip_on_cran()
+    placebuy <- place_order("TESTEX", "FOOBAR",
+                        body = ordbuy, apikey=apikey)
           expect_is(
               get_order_status(
                   placebuy.p$id,
@@ -35,6 +37,8 @@ test_that("get_order_status returns a response", {
 
 test_that("cancel order returns a response", {
     skip_on_cran("This test requires an API key")
+    placebuy <- place_order("TESTEX", "FOOBAR",
+                        body = ordbuy, apikey=apikey)
     expect_is(cancel_order(placebuy.p$id,
                            "TESTEX",
                            "FOOBAR"), "response")
@@ -64,6 +68,8 @@ test_that("parse_response returns a list from an order object", {
 })
 test_that("a placed order returns a totalFilled numeric greater than 0", {
     skip_on_cran()
+    placed <- place_order("TESTEX", "FOOBAR", body=ord, apikey=apikey)
+    placedp <- parse_response(placed)
         expect_gte(placebuyp[["totalFilled"]], 0)
     })
 
