@@ -1,3 +1,4 @@
+apikey <- get_api_key("~/Dropbox/Code/Starfighter/apikey.txt")
 ordbuy <- create_order(account = "EXB123456",
                                          venue = "TESTEX",
                                          stock = "FOOBAR",
@@ -71,13 +72,4 @@ test_that("place_order returns a response", {
     expect_is(placebuy, "response")
 })
 
-apikey <- get_api_key("~/Dropbox/Code/Starfighter/apikey.txt")
-test_that("get_api_key returns a character vector", {
-    skip_on_cran("This test requires an API key")
-    expect_is(apikey, "character")
-})
-skip_on_cran("This test requires an API key")
-test_that("api key is length one", {
-    skip_on_cran("This test requires an API key")
-    expect_equal(length(apikey), 1)
-})
+
