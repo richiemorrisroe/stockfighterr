@@ -54,7 +54,7 @@ test_that("cancel order returns a response", {
                            "TESTEX",
                            "FOOBAR"), "response")})
 test_that("get_all_orders returns a response", {
-    expect_is(get_all_orders("TESTEX", "EXB123456"), "response")})
+    expect_is(get_all_orders("TESTEX", "EXB123456", apikey), "response")})
 test_that("ioc orders are always closed after response", {
     ord <- create_order("EXB123456",
                         "TESTEX",

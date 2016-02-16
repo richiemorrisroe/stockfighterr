@@ -125,12 +125,15 @@ cancel_order <- function(id, venue, stock) {
 ##' @title get_all_orders
 ##' @param venue trading venue
 ##' @param account current account
-##' @return a HTTP response with data (formatted as JSON)
+##' @param apikey your APIKey
+##' @return a HTTP response with data 
 ##' @author richie
 ##' @export
-get_all_orders <- function(venue, account) {
+get_all_orders <- function(venue, account, apikey=apikey) {
     url <- paste(base_url, "venues/", venue, "/accounts/", account, "/orders/", sep="")
-    res <- httr::GET(url)## , add_headers("X-Starfighter-Authorization"=apikey))
+    res <- httr::GET(url,
+                     httr::add_headers(
+                         "X-Starfighter-Authorization"=apikey))
     res
 }
 ##' Read the API key in from a file, assumes only the key is present in this file
