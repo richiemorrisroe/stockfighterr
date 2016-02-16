@@ -1,6 +1,6 @@
 Package: stockfighterr
-Title: provides a client for the stockfighter API (https://www.stockfighter.io)
-Version: 0.0.0.9000
+Title: Provides a Client for the Stockfighter API (https://www.stockfighter.io)
+Version: 0.0.0.1
 Authors@R: person("Richie", "Morrisroe", email = "richie.morrisroe@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends:

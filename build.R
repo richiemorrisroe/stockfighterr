@@ -1,3 +1,4 @@
+setwd("~/Dropbox/Code/Starfighter/stockfighterr")
 devtools::setup(".", rstudio=FALSE)
 devtools::use_build_ignore("build.R")
 devtools::use_build_ignore("README.org")
