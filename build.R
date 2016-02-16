@@ -1,4 +1,7 @@
 devtools::setup(".", rstudio=FALSE)
+devtools::use_build_ignore("build.R")
+devtools::use_build_ignore("README.org")
+devtools::use_build_ignore("^#")
 devtools::use_testthat()
 devtools::document()
 devtools::use_package("httr")
