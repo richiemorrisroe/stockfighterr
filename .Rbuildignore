@@ -1,3 +1,5 @@
 ^build\.R$
 ^README\.org$
 ^^#$
+^cran_comments\.md$
+^cran-comments\.md$
