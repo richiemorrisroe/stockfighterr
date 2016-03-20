@@ -4,15 +4,17 @@ options(fractional.seconds=7)
 ##' Note that the quote is valid for a time in the past, and may not reflect current state of the market. Makes a HTTP request to the relevant endpoint. Making a change to ensure that magit knows where my files are
 ##' @title get_quote
 ##' @param venue where the stock is being traded
-##' @param stock which stoc to get quote for
+##' @param stock which stock to get quote for
 ##' @param ... further arguments passed to httr::GET
 ##' @return a named list with components
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 get_quote <- function(venue, stock, ...) {
     url <- paste(base_url,  "venues/", venue, "/stocks/", stock, "/quote", sep="")
     res <- httr::GET(url=url, ...)
-    return(res)
+    if(check_status(res)) {
+        return(res)
+    }
 }
 ##' Get the state of the orderbook at a particular venue and for a particular stock
 ##' This function returns a more granular picture than get_quote, with two dataframes containing price and qty available for both bid (buy) and ask (sell)
@@ -20,11 +22,18 @@ get_quote <- function(venue, stock, ...) {
 ##' @param venue a particular venue
 ##' @param stock a particular stock
 ##' @return an object of class orderbook
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 get_orderbook <- function(venue, stock) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, sep="")
     res <- httr::GET(url=url)
+        if(check_status(res)) {
+            return(res)
+        }
+        else {
+            return(NULL)
+        }
+
 }
 ##' Create a named list to be used in a POST request for trading a particular stock
 ##' Really just provides a shim around creating a list for conversion to JSON
@@ -37,7 +46,7 @@ get_orderbook <- function(venue, stock) {
 ##' @param direction buy or sell
 ##' @param ordertype one of market, limit, fill-or-kill or immediate-or-cancel
 ##' @return a named list with components as per parameters to function
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 create_order <- function(account, venue, stock, price, qty, direction, ordertype="limit"){
     res <- list(account=account, venue=venue, stock=stock,
@@ -52,14 +61,20 @@ create_order <- function(account, venue, stock, price, qty, direction, ordertype
 ##' @param body the result of a call to create_order
 ##' @param apikey authentication
 ##' @return a response object
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 place_order <- function(venue, stock, body, apikey) {
     url <- paste(base_url, "/venues/", venue, "/stocks/", stock, "/orders", sep="")
     res <- httr::POST(url=url,
                       body=body,
                       encode="json", httr::add_headers(
-"X-Starfighter-Authorization"=apikey))
+                                         "X-Starfighter-Authorization"=apikey))
+            if(check_status(res)) {
+            return(res)
+        }
+        else {
+            return(NULL)
+        }
     
 }
 ##' Parse JSON formatted text responses from the API
@@ -68,7 +83,7 @@ place_order <- function(venue, stock, body, apikey) {
 ##' @title parse_response
 ##' @param response the results of an API call
 ##' @return a named list with the components of the response
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 parse_response <- function (response) {
     content <- httr::content(response, as="text")
@@ -81,13 +96,17 @@ parse_response <- function (response) {
 ##' @title get_tickers
 ##' @param venue the venue to request stocks for
 ##' @return a HTTP response containing the requested tickers
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 get_tickers <- function(venue) {
     url <- paste(base_url, "venues/", venue, "/stocks/", sep="")
-    res <- httr::GET(url) ##
-                     ## add_headers("X-Starfighter-Authorization"=apikey))
-    res
+    res <- httr::GET(url)
+    if(check_status(res)) {
+        return(res)
+    }
+    else {
+        return(NULL)
+    }
 }
 ##' get the status of an order
 ##'
@@ -97,12 +116,12 @@ get_tickers <- function(venue) {
 ##' @param venue the venue
 ##' @param stock the stock which was in the previous order
 ##' @return a HTTP response indicating the status of this order
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 get_order_status <- function(id, venue, stock) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
     print(url)
-    res <- httr::GET(url) 
+    res <- httr::GET(url)
     res
 }
 ##' Cancel an outstanding order
@@ -113,7 +132,7 @@ get_order_status <- function(id, venue, stock) {
 ##' @param venue the venue
 ##' @param stock the stock
 ##' @return a HTTP response indicating the results of the call
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
 cancel_order <- function(id, venue, stock) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
@@ -127,9 +146,9 @@ cancel_order <- function(id, venue, stock) {
 ##' @param account current account
 ##' @param apikey your APIKey
 ##' @return a HTTP response with data 
-##' @author richie
+##' @author Richie Morrisroe
 ##' @export
-get_all_orders <- function(venue, account, apikey=apikey) {
+get_all_orders <- function(venue, account, apikey) {
     url <- paste(base_url, "venues/", venue, "/accounts/", account, "/orders/", sep="")
     res <- httr::GET(url,
                      httr::add_headers(
@@ -138,32 +157,33 @@ get_all_orders <- function(venue, account, apikey=apikey) {
 }
 ##' Read the API key in from a file, assumes only the key is present in this file
 ##'
-##' Without doing this, I couldn't write my tests :(
+##' Use this to get your auth key into R. 
 ##' @title get_api_key
 ##' @param path location of the file containing the API key (absolute)
-##' @return the apikey as an object
-##' @author richie
+##' @return the apikey as a character string
+##' @author Richie Morrisroe Morrisroe
 ##' @export
 get_api_key <- function(path) {
     apikey <- scan(path, what="character")
 }
 get_venues <- function () {
     url <- paste0(base_url, "venues")
-    httr::GET(url)
+    res <- httr::GET(url)
+    check_status(res)
 }
 ##' Check response code of a http request
 ##'
-##' Message if problem
+##' If status_code is not 200, return FALSE. Used internally by the package, made available in case it proves useful
 ##' @title check_status
 ##' @param response a response object
-##' @return a response (print a message if there\'s a problem)
-##' @author richie
+##' @return TRUE if successful, else FALSE
+##' @author Richie Morrisroe
+##' @export
 check_status <- function(response) {
-    if(httr::status_code(response)==200) {
-        return(response)
+    if(httr::status_code(response) == 200) {
+        return(TRUE)
     } else {
-        message("did not return success")
-        return(response)
+        message(response)
+        return(FALSE)
     }
-    response
 }

@@ -1,11 +1,11 @@
-## apikey <- get_api_key("~/Dropbox/Code/Starfighter/apikey.txt")
-## ordbuy <- create_order(account = "EXB123456",
-##                                          venue = "TESTEX",
-##                                          stock = "FOOBAR",
-##                                          price = 2000,
-##                                          qty = 200,
-##                                          direction = "buy",
-##                        ordertype = "limit")
+apikey <- get_api_key("~/Dropbox/Code/Starfighter/apikey.txt")
+ordbuy <- create_order(account = "EXB123456",
+                                         venue = "TESTEX",
+                                         stock = "FOOBAR",
+                                         price = 11000,
+                                         qty = 200,
+                                         direction = "buy",
+                       ordertype = "limit")
 
 ## test_that("create order returns a list",
 ##           expect_is(ordbuy, "list" ))
