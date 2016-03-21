@@ -1,9 +1,8 @@
 Package: stockfighterr
-Title: Stockfighterr
+Title: stockfighterr
 Version: 0.0.1
 Authors@R: person("Richie", "Morrisroe", email = "richie.morrisroe@gmail.com", role = c("aut", "cre"))
-Description: Provides a Client for the Stockfighter API (https://www.stockfighter.io). Stockfighter is a programming game with simulated trading levels interacted with via an Applications Programming
-Interface. This package provides a basic client for said programming interface.
+Description: Provides a Client for the Stockfighter API (https://www.stockfighter.io). Stockfighter is a programming game with simulated trading levels interacted with via an Applications Programming Interface. This package provides a basic client for said programming interface.
 Author: Richie Morrisroe [aut, cre]
 Maintainer: Richie Morrisroe <richie.morrisroe@gmail.com>
 Depends:
