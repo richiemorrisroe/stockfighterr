@@ -15,6 +15,9 @@ get_quote <- function(venue, stock, ...) {
     if(check_status(res)) {
         return(res)
     }
+    else {
+        error(res)
+    }
 }
 ##' Get the state of the orderbook at a particular venue and for a particular stock
 ##' This function returns a more granular picture than get_quote, with two dataframes containing price and qty available for both bid (buy) and ask (sell)
@@ -131,12 +134,13 @@ get_order_status <- function(id, venue, stock) {
 ##' @param id the order id
 ##' @param venue the venue
 ##' @param stock the stock
+##' @param apikey an authorisation token
 ##' @return a HTTP response indicating the results of the call
 ##' @author Richie Morrisroe
 ##' @export
-cancel_order <- function(id, venue, stock) {
+cancel_order <- function(id, venue, stock, apikey) {
     url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
-    res <- httr::DELETE(url)
+    res <- httr::DELETE(url, httr::add_headers("X-Starfighter-Authorization"=apikey))
     res
 }
 ##' Get the status of all orders related to a trading account
@@ -166,10 +170,21 @@ get_all_orders <- function(venue, account, apikey) {
 get_api_key <- function(path) {
     apikey <- scan(path, what="character")
 }
+##' Undocumented get_venues endpoint
+##'
+##' Honestly not sure what this is useful for, but it seems cool. 
+##' @title get_venues
+##' @return either an error message or the response
+##' @author richie
 get_venues <- function () {
     url <- paste0(base_url, "venues")
     res <- httr::GET(url)
-    check_status(res)
+    if(check_status(res)) {
+        return(res)
+    }
+    else {
+        error(res)
+    }
 }
 ##' Check response code of a http request
 ##'
