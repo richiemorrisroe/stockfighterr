@@ -26,7 +26,8 @@ options(fractional.seconds=7)
 ##' @author Richie Morrisroe
 ##' @export
 get_quote <- function(venue, stock, ...) {
-    url <- paste(base_url,  "venues/", venue, "/stocks/", stock, "/quote", sep="")
+    base <- base_url()
+    url <- paste(base,  "venues/", venue, "/stocks/", stock, "/quote", sep="")
     res <- httr::GET(url=url, timeout(10), ...)
     if(check_status(res)) {
         return(res)
@@ -44,7 +45,8 @@ get_quote <- function(venue, stock, ...) {
 ##' @author Richie Morrisroe
 ##' @export
 get_orderbook <- function(venue, stock) {
-    url <- paste(base_url, "venues/", venue, "/stocks/", stock, sep="")
+        base <- base_url()
+    url <- paste(base, "venues/", venue, "/stocks/", stock, sep="")
     res <- httr::GET(url=url)
         if(check_status(res)) {
             return(res)
@@ -83,7 +85,8 @@ create_order <- function(account, venue, stock, price, qty, direction, ordertype
 ##' @author Richie Morrisroe
 ##' @export
 place_order <- function(venue, stock, body, apikey) {
-    url <- paste(base_url, "/venues/", venue, "/stocks/", stock, "/orders", sep="")
+    base <- base_url()
+    url <- paste(base, "/venues/", venue, "/stocks/", stock, "/orders", sep="")
     res <- httr::POST(url=url,
                       body=body,
                       encode="json", httr::add_headers(
@@ -118,7 +121,8 @@ parse_response <- function (response) {
 ##' @author Richie Morrisroe
 ##' @export
 get_tickers <- function(venue) {
-    url <- paste(base_url, "venues/", venue, "/stocks/", sep="")
+    base <- base_url()
+    url <- paste(base, "venues/", venue, "/stocks/", sep="")
     res <- httr::GET(url)
     if(check_status(res)) {
         return(res)
@@ -138,7 +142,8 @@ get_tickers <- function(venue) {
 ##' @author Richie Morrisroe
 ##' @export
 get_order_status <- function(id, venue, stock) {
-    url <- paste(base_url, "venues/", venue, "stocks/", stock, "/orders/", id, sep="")
+    base <- base_url()
+    url <- paste(base, "venues/", venue, "stocks/", stock, "/orders/", id, sep="")
     res <- httr::GET(url)
     res
 }
@@ -154,7 +159,8 @@ get_order_status <- function(id, venue, stock) {
 ##' @author Richie Morrisroe
 ##' @export
 cancel_order <- function(id, venue, stock, apikey) {
-    url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
+    base <- base_url()
+    url <- paste(base, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
     res <- httr::DELETE(url, httr::add_headers("X-Starfighter-Authorization"=apikey))
     res
 }
@@ -168,7 +174,8 @@ cancel_order <- function(id, venue, stock, apikey) {
 ##' @author Richie Morrisroe
 ##' @export
 get_all_orders <- function(venue, account, apikey) {
-    url <- paste(base_url, "venues/", venue, "/accounts/", account, "/orders/", sep="")
+    base <- base_url()
+    url <- paste(base, "venues/", venue, "/accounts/", account, "/orders/", sep="")
     res <- httr::GET(url,
                      httr::add_headers(
                          "X-Starfighter-Authorization"=apikey))
@@ -192,7 +199,8 @@ get_api_key <- function(path) {
 ##' @return either an error message or the response
 ##' @author richie
 get_venues <- function () {
-    url <- paste0(base_url, "venues")
+    base <- base_url()
+    url <- paste0(base, "venues")
     res <- httr::GET(url)
     if(check_status(res)) {
         return(res)
