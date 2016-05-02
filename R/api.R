@@ -1,7 +1,23 @@
-base_url <- "https://api.stockfighter.io/ob/api/"
+##' Get or set the base_url of the server
+##'
+##' Mostly to encapsulate the URL itself. Potentially useful if you wish to connect to a different server
+##' @title base_url
+##' @param url a string representing the base address of the server to use
+##' @return the base url for use with other function
+##' @author richie
+base_url <- function(url) {
+    if(is.null(url)) {
+        base_url <- "https://api.stockfighter.io/ob/api/"
+    }
+    else {
+        base_url <- url
+    }
+    base_url
+}
+##should probably do something to encapsulate this
 options(fractional.seconds=7)
 ##' Return a quote for a given stock from a given venue
-##' Note that the quote is valid for a time in the past, and may not reflect current state of the market. Makes a HTTP request to the relevant endpoint. Making a change to ensure that magit knows where my files are
+##' Note that the quote is valid for a time in the past, and may not reflect current state of the market. Makes a HTTP request to the relevant endpoint.
 ##' @title get_quote
 ##' @param venue where the stock is being traded
 ##' @param stock which stock to get quote for
@@ -11,7 +27,7 @@ options(fractional.seconds=7)
 ##' @export
 get_quote <- function(venue, stock, ...) {
     url <- paste(base_url,  "venues/", venue, "/stocks/", stock, "/quote", sep="")
-    res <- httr::GET(url=url, ...)
+    res <- httr::GET(url=url, timeout(10), ...)
     if(check_status(res)) {
         return(res)
     }
@@ -122,8 +138,7 @@ get_tickers <- function(venue) {
 ##' @author Richie Morrisroe
 ##' @export
 get_order_status <- function(id, venue, stock) {
-    url <- paste(base_url, "venues/", venue, "/stocks/", stock, "/orders/", id, sep="")
-    print(url)
+    url <- paste(base_url, "venues/", venue, "stocks/", stock, "/orders/", id, sep="")
     res <- httr::GET(url)
     res
 }
